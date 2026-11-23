@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+
 #define ARCHIVO "/home/maxim/Descargas/ejemplo.txt"
 
 int main() {
@@ -20,7 +21,6 @@ int main() {
         char *l = linea;                      // quitar espacios del inicio
         while (*l == ' ' || *l == '\t') l++;
         if (*l == '\0' || strncmp(l, "//", 2) == 0 || strncmp(l, "/*", 2) == 0) continue;
-        // ===== NUEVO (paso 3): contar simbolos =====
         int len = strlen(l);
         char ultimo = l[len - 1];
         int comillas = 0, abre = 0, cierra = 0;
@@ -32,8 +32,14 @@ int main() {
             if (l[i] == '{') llaves++;
             if (l[i] == '}') llaves--;
         }
-
-        printf("Linea %d: %s\n", num, l);   // temporal (se borra en el paso 4)
+        if (strncmp(l, "#include", 8) == 0) {
+            if ((strchr(l, '<') && strchr(l, '>')) || comillas == 2)
+                printf("Linea %d: OK, include bien\n", num);
+            else {
+                printf("Linea %d: ERROR, el include debe ser <x.h> o \"x.h\"\n", num);
+                errores++;
+            }
+        }
     }
     fclose(f);
 
