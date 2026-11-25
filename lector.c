@@ -47,7 +47,6 @@ int main() {
                 errores++;
             }
         }
-        // ===== NUEVO (paso 5): revisar printf =====
         else if (empieza(l, "printf")) {
             if (l[6] != '(') {
                 printf("Linea %d: ERROR, falta '(' despues de printf\n", num);
@@ -63,6 +62,14 @@ int main() {
                 errores++;
             } else
                 printf("Linea %d: OK, printf bien\n", num);
+        }
+        // revisar if / while / for
+        else if (empieza(l, "if") || empieza(l, "while") || empieza(l, "for")) {
+            if (abre == 0 || abre != cierra) {
+                printf("Linea %d: ERROR, parentesis mal en la condicion\n", num);
+                errores++;
+            } else
+                printf("Linea %d: OK, condicion/ciclo bien\n", num);
         }
     }
     fclose(f);
